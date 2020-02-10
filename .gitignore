@@ -14,3 +14,22 @@
 .cxx
 !/.idea/
 
+app/build/generated/res/
+app/build/intermediates/data_binding_layout_info_type_merge/
+app/build/intermediates/dex/debug/mergeLibDexDebug/
+app/build/intermediates/duplicate_classes_check/
+app/build/intermediates/external_libs_dex_archive/
+app/build/intermediates/incremental/mergeDebugResources/merged.dir/
+app/build/intermediates/incremental/mergeDebugResources/stripped.dir/
+app/build/intermediates/incremental/processDebugResources/
+app/build/intermediates/merged_jni_libs/
+app/build/intermediates/merged_native_libs/
+app/build/intermediates/merged_shaders/
+app/build/intermediates/mixed_scope_dex_archive/
+app/build/intermediates/shader_assets/
+app/build/intermediates/stripped_native_libs/
+app/build/intermediates/sub_project_dex_archive/
+app/build/intermediates/validate_signing_config/
+app/build/tmp/
+app/libs/
+/app/build/

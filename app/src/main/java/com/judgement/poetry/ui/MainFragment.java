@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,40 +57,41 @@ public class MainFragment extends Fragment {
         adapter = new MyAdapter();
         recyclerView.setAdapter(adapter);
         filteredPoetry = poetryViewModel.resetPoetryLive();
+        filteredPoetry.observe(requireActivity(), new Observer<List<Poetry>>() {
+            @Override
+            public void onChanged(List<Poetry> poetries) {
+                adapter.setPoetryDataList(poetries);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.main_menu, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        final SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                String pattern = query.trim();
-                filteredPoetry.removeObservers(requireActivity());
-                filteredPoetry = poetryViewModel.getPoetryWithPattern(pattern);
-                filteredPoetry.observe(requireActivity(), new Observer<List<Poetry>>() {
-                    @Override
-                    public void onChanged(List<Poetry> poetries) {
-                        adapter.setPoetryDataList(poetries);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-                recyclerView.scrollToPosition(0);
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                if(newText.isEmpty()){
+                    poetryViewModel.resetPoetryLive();
+                }else {
+                    String pattern = newText.trim();
+                    poetryViewModel.getPoetryWithPattern(pattern);
+                }
+                return true;
             }
         });
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                filteredPoetry.removeObservers(requireActivity());
-                filteredPoetry = poetryViewModel.resetPoetryLive();
+                poetryViewModel.resetPoetryLive();
                 return true;
             }
         });

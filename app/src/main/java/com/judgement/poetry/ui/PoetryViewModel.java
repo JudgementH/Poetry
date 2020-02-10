@@ -26,30 +26,23 @@ public class PoetryViewModel extends AndroidViewModel {
         return poetryRepository.getAllPoetry();
     }
 
-    public MutableLiveData<List<Poetry>> getPoetryLive(){
-        if(poetryLive == null){
+    public MutableLiveData<List<Poetry>> getPoetryLive() {
+        if (poetryLive == null) {
             poetryLive = new MutableLiveData<>();
         }
         return poetryLive;
     }
 
-    public MutableLiveData<List<Poetry>> resetPoetryLive(){
-        poetryLive = null;
-        poetryLive = new MutableLiveData<>();
+    public MutableLiveData<List<Poetry>> resetPoetryLive() {
+        poetryLive = getPoetryLive();
+        ArrayList<Poetry> poetryArrayList = new ArrayList<>();
+        poetryArrayList.add(new Poetry("无","无","无","输入关键字，开始飞花令"));
+        poetryLive.setValue(poetryArrayList);
         return poetryLive;
     }
 
     public LiveData<List<Poetry>> getPoetryWithPattern(String pattern) {
-        List<Poetry> sentencesWithPattern = new ArrayList<>();
-        List<Poetry> poetryWithPattern = poetryRepository.getPoetryWithPattern(pattern);
-        for (Poetry p : poetryWithPattern) {
-            sentencesWithPattern.addAll(p.getKeySentence(pattern));
-        }
-        MutableLiveData<List<Poetry>> sentencesLive = getPoetryLive();
-        if(sentencesWithPattern.size()==0){
-            sentencesWithPattern.add(new Poetry("无","无","无","没有匹配的诗句"));
-        }
-        sentencesLive.setValue(sentencesWithPattern);
-        return sentencesLive;
+        poetryRepository.getPoetryWithPattern(pattern,poetryLive);
+        return poetryLive;
     }
 }
